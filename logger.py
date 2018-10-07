@@ -43,20 +43,19 @@ class Logger(object):
         - Expects time_step_number as an Int.
         - This method should write a log telling us when one time step ends,
             and the next time step begins.  The format of this log should be:
-                "Time step {time_step_number} ended, beginning
-                {time_step_number + 1}..."
+            "Time step {time_step_number} ended, beginning
+            {time_step_number + 1}..."
         - STRETCH CHALLENGE DETAILS:
             - If you choose to extend this method, the format of the summary
                 statistics logged are up to you.  At minimum, it should
                 contain:
-                    - The number of people that were infected during this
-                        specific time step.
-                    - The number of people that died on this specific time
-                        step.
-                    - The total number of people infected in the population,
-                        including the newly infected
-                    - The total number of dead, including those that died
-                        during this time step.
+                - The number of people that were infected during this specific
+                    time step.
+                - The number of people that died on this specific time step.
+                - The total number of people infected in the population,
+                    including the newly infected
+                - The total number of dead, including those that died during
+                    this time step.
     '''
 
     def __init__(self, file_name):

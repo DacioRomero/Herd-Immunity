@@ -49,7 +49,7 @@ class Person(object):
         self.is_alive = True
         self.infected = infected
 
-    def did_survive_infection():
+    def did_survive_infection(self):
         if random.random() > self.infected.mortality_rate:
             self.is_vaccinated = True
             self.infected = None
