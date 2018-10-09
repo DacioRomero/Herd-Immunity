@@ -30,7 +30,7 @@ class Logger(object):
             because {'vaccinated' or 'already sick'}"
         - Appends the interaction to logfile.
 
-    log_infection_survival(self, person, did_die_from_infection):
+    log_survival(self, person, did_die_from_infection):
         - Expects person as Person object.
         - Expects bool for did_die_from_infection, with True denoting they died
             from their infection and False denoting they survived and became
@@ -94,7 +94,7 @@ class Logger(object):
         # that each event logged ends up on a separate line!
         pass
 
-    def log_infection_survival(self, person, did_die_from_infection):
+    def log_survival(self, person, did_die_from_infection):
         # TODO: Finish this method.  The Simulation object should use this
         # method to log the results of every call of a Person object's .resolve
         # infection() method. If the person survives, did_die_from_infection

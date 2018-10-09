@@ -10,14 +10,14 @@ class Person(object):
     _id: Int.  A unique ID assigned to each person.
 
     is_vaccinated: Bool.  Determines whether the person object is vaccinated
-        against the disease in the simulation.
+    against the disease in the simulation.
 
     is_alive: Bool. All person objects begin alive (value set to true).
-        Changed to false if person object dies from an infection.
+    Changed to false if person object dies from an infection.
 
     infection:  None/Virus object.  Set to None for people that are not
-        infected. If a person is infected, will instead be set to the virus
-        object the person is infected with.
+    infected. If a person is infected, will instead be set to the virus object
+    the person is infected with.
 
     _____Methods_____:
 
@@ -53,5 +53,7 @@ class Person(object):
         if random.random() > self.infected.mortality_rate:
             self.is_vaccinated = True
             self.infected = None
-        else:
-            self.is_alive = False
+            return False
+
+        self.is_alive = False
+        return False
