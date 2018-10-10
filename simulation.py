@@ -89,8 +89,8 @@ class Simulation():
         self.next_person_id = 0
 
         self.virus = Virus(virus_name, mortality_rate, basic_repro_num)
-        file_name = f'{virus_name}_simulation_pop_{population_size}_vp_
-        {vacc_percentage}_infected_{initial_infected}.txt'
+        file_name = (f'{virus_name}_simulation_pop_{population_size}_vp_'
+                     f'{vacc_percentage}_infected_{initial_infected}.txt')
         self.logger = Logger(file_name)
 
         self.newly_infected = []
@@ -115,8 +115,8 @@ class Simulation():
         return population
 
     def _simulation_should_continue(self):
-        return self.current_infected > 0 and
-        self.total_dead < self.population_size
+        return (self.current_infected > 0 and
+                self.total_dead < self.population_size)
 
     def run(self):
         time_step_counter = 0
