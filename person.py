@@ -21,14 +21,10 @@ class Person(object):
 
     _____Methods_____:
 
-    __init__(self, _id, is_vaccinated, infected=False):
+    __init__(self, _id, is_vaccinated, infection=None):
         - self.alive should be automatically set to true during instantiation.
         - all other attributes for self should be set to their corresponding
             parameter passed during instantiation.
-        - If person is chosen to be infected for first round of simulation,
-            then the object should create a Virus object and set it as the
-            value for self.infection.  Otherwise, self.infection should be set
-            to None.
 
     did_survive_infection(self):
         - Only called if infection attribute is not None.
@@ -43,17 +39,17 @@ class Person(object):
                 self.infected to None.
     '''
 
-    def __init__(self, _id, is_vaccinated, infected=None):
+    def __init__(self, _id, is_vaccinated, infection=None):
         self._id = _id
         self.is_vaccinated = is_vaccinated
         self.is_alive = True
-        self.infected = infected
+        self.infection = infection
 
     def did_survive_infection(self):
-        if random.random() > self.infected.mortality_rate:
+        if random.random() > self.infection.mortality_rate:
             self.is_vaccinated = True
-            self.infected = None
-            return False
+            self.infection = None
+            return True
 
         self.is_alive = False
         return False

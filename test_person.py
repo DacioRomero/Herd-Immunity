@@ -8,7 +8,7 @@ class TestPerson:
         ebola = Virus("Ebola", 0.8, 0.1)
         person = Person(0, False, ebola)
 
-        assert person.infected is ebola
+        assert person.infection is ebola
         assert person.is_alive is True
         assert person.is_vaccinated is False
         assert person._id is 0
@@ -17,9 +17,9 @@ class TestPerson:
         ebola = Virus("Ebola", 0.8, 0.1)
         person = Person(0, False, ebola)
 
-        person.did_survive_infection()
-
-        if person.infected:
-            assert person.is_alive is False
-        else:
+        if person.did_survive_infection():
+            assert person.is_alive is True
             assert person.is_vaccinated is True
+            assert person.infection is None
+        else:
+            assert person.is_alive is False

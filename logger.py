@@ -91,9 +91,15 @@ class Logger(object):
 
             log.write('\n')
 
-    def log_time_step(self, time_step_number):
+    def log_time_step(self, time_step_number,
+                      newly_infected_count, newly_dead_count,
+                      total_infected, total_dead):
         with self.open_file('a') as log:
             log.write(f'Time step {time_step_number} ended, '
+                      f'{newly_infected_count} are infected, '
+                      f'{newly_dead_count} recently died, '
+                      f'{total_infected} got infected, '
+                      f'{total_dead} have died, '
                       f'beginning {time_step_number + 1}...\n')
 
     def open_file(self, mode='r', buffering=-1, encoding=None, errors=None,

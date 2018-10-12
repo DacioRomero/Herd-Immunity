@@ -53,14 +53,21 @@ class TestLogger:
         filename = self._generate_filename()
         logger = Logger(filename)
 
-        logger.log_time_step(42)
+        logger.log_time_step(time_step_number=42,
+                             newly_infected_count=21, newly_dead_count=4,
+                             total_infected=43, total_dead=2)
 
         with logger.open_file() as file:
             output = file.read()
 
         os.remove(filename)
 
-        expected = 'Time step 42 ended, beginning 43...\n'
+        expected = ('Time step 42 ended, '
+                    '21 are infected, '
+                    '4 recently died, '
+                    '43 got infected, '
+                    '2 have died, '
+                    'beginning 43...\n')
 
         assert output == expected
 

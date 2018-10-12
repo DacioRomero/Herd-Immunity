@@ -101,12 +101,13 @@ class Simulation():
     def _create_population(self, initial_infected):
         population = []
         infected_count = 0
+        vacc_count = 0
 
-        while len(population) != pop_size:
+        while len(population) != self.population_size:
             if infected_count != initial_infected:
                 population.append(Person(self.next_person_id,
                                          is_vaccinated=False,
-                                         infected=self.virus))
+                                         infection=self.virus))
                 infected_count += 1
             else:
                 is_vaccinated = random.random() < self.vacc_percentage
@@ -122,33 +123,39 @@ class Simulation():
 
     def run(self):
         time_step_counter = 0
-        should_continue = self._simulation_should_continue()
 
-        while should_continue:
-            self.time_step()
-            self.logger.log_time_step(time_step_counter)
+        while self._simulation_should_continue():
+            (newly_infected_count, newly_dead_count) = self.time_step()
+            self.logger.log_time_step(time_step_counter,
+                                      newly_infected_count, newly_dead_count,
+                                      self.total_infected, self.total_dead)
             time_step_counter += 1
-
-            should_continue = self._simulation_should_continue()
 
         print(f'The simulation has ended after {time_step_counter} turns.')
 
     def time_step(self):
         alive = list(filter(lambda p: p.is_alive, self.population))
-        infected = list(filter(lambda p: p.infected, alive))
+        infected = list(filter(lambda p: p.infection is not None, alive))
 
         for person in infected:
-            for i in range(100):
+            for _ in range(100):
                 self.interaction(person, random_person=random.choice(alive))
+
+        newly_dead_count = 0
 
         for person in infected:
             if person.did_survive_infection():
                 self.logger.log_survival(person, did_die_from_infection=False)
             else:
                 self.logger.log_survival(person, did_die_from_infection=True)
-                self.total_dead += 1
+                newly_dead_count += 1
+
+        self.total_dead += newly_dead_count
+        newly_infected_count = len(self.newly_infected)  # Store before reset
 
         self._infect_newly_infected()
+
+        return (newly_infected_count, newly_dead_count)  # Return for logging
 
     def interaction(self, person, random_person):
         assert person.is_alive is True
@@ -156,14 +163,15 @@ class Simulation():
 
         if random_person.is_vaccinated:
             self.logger.log_interaction(person, random_person,
-                                        person2_vacc=True)
-        elif random_person.infected:
+                                        did_infect=False, person2_vacc=True)
+        elif (random_person.infection is not None or
+              random_person._id in self.newly_infected):
             self.logger.log_interaction(person, random_person,
-                                        person2_sick=True)
+                                        did_infect=False, person2_sick=True)
         else:
-            if random.random() < person.infected.basic_repro_num:
+            if random.random() <= person.infection.basic_repro_num:
                 self.newly_infected.append(random_person._id)
-                self.total_infected += 1
+
                 self.logger.log_interaction(person, random_person,
                                             did_infect=True)
             else:
@@ -175,11 +183,11 @@ class Simulation():
                                       self.population))
 
         for person in infected_people:
-            person.infected = self.virus
+            person.infection = self.virus
 
-        self.current_infected = len(infected_people)
+        self.current_infected = len(self.newly_infected)
         self.total_infected += self.current_infected
-        self.newly_infected = []
+        self.newly_infected.clear()
 
 
 if __name__ == '__main__':

@@ -1,0 +1,4 @@
+1. pop_size=1000, vacc_percentage=0.9, virus_name=Smallpox,
+    mortality_rate=0.3, basic_repro_num=0.333333
+2. 10.9%
+3. 3.6%
