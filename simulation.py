@@ -84,9 +84,11 @@ class Simulation():
     def __init__(self, population_size, vacc_percentage, virus_name,
                  mortality_rate, basic_repro_num, initial_infected=1):
         self.population_size = population_size
+        self.vacc_percentage = vacc_percentage
         self.total_infected = initial_infected
         self.current_infected = initial_infected
         self.next_person_id = 0
+        self.total_dead = 0
 
         self.virus = Virus(virus_name, mortality_rate, basic_repro_num)
         file_name = (f'{virus_name}_simulation_pop_{population_size}_vp_'
@@ -124,6 +126,7 @@ class Simulation():
 
         while should_continue:
             self.time_step()
+            self.logger.log_time_step(time_step_counter)
             time_step_counter += 1
 
             should_continue = self._simulation_should_continue()
@@ -131,19 +134,19 @@ class Simulation():
         print(f'The simulation has ended after {time_step_counter} turns.')
 
     def time_step(self):
-        alive = filter(lambda p: p.is_alive, population)
-        infected = filter(lambda p: return p.infected, alive_people)
+        alive = list(filter(lambda p: p.is_alive, self.population))
+        infected = list(filter(lambda p: p.infected, alive))
 
         for person in infected:
             for i in range(100):
                 self.interaction(person, random_person=random.choice(alive))
 
         for person in infected:
-            if person.did_die_from_infection():
+            if person.did_survive_infection():
+                self.logger.log_survival(person, did_die_from_infection=False)
+            else:
                 self.logger.log_survival(person, did_die_from_infection=True)
                 self.total_dead += 1
-            else:
-                self.logger.log_survival(person, did_die_from_infection=False)
 
         self._infect_newly_infected()
 
@@ -158,8 +161,8 @@ class Simulation():
             self.logger.log_interaction(person, random_person,
                                         person2_sick=True)
         else:
-            if random.random() < person.virus.basic_repro_num:
-                self.newly_infected.append(random.person._id)
+            if random.random() < person.infected.basic_repro_num:
+                self.newly_infected.append(random_person._id)
                 self.total_infected += 1
                 self.logger.log_interaction(person, random_person,
                                             did_infect=True)
@@ -168,9 +171,8 @@ class Simulation():
                                             did_infect=False)
 
     def _infect_newly_infected(self):
-
         infected_people = list(filter(lambda p: p._id in self.newly_infected,
-                                      population))
+                                      self.population))
 
         for person in infected_people:
             person.infected = self.virus
