@@ -69,11 +69,11 @@ class Logger(object):
 
     def log_interaction(self, person1, person2, did_infect=None,
                         person2_vacc=None, person2_sick=None):
-        with self.open_file('w') as log:
+        with self.open_file('a') as log:
             if did_infect:
                 log.write(f'{person1._id} infects {person2._id}')
             else:
-                log.write(f'{person1._id} didn't infect {person2._id}')
+                log.write(f'{person1._id} didn\'t infect {person2._id}')
 
                 if person2_vacc:
                     log.write(' because vaccinated')
@@ -83,7 +83,7 @@ class Logger(object):
             log.write('\n')
 
     def log_survival(self, person, did_die_from_infection):
-        with self.open_file('w') as log:
+        with self.open_file('a') as log:
             if did_die_from_infection:
                 log.write(f'{person._id} died from infection')
             else:
@@ -92,18 +92,9 @@ class Logger(object):
             log.write('\n')
 
     def log_time_step(self, time_step_number):
-        # TODO: Finish this method.  This method should log when a time step
-        # ends, and a new one begins.  See the documentation for more
-        # information on the format of the log.
-        # NOTE: Stretch challenge opportunity! Modify this method so that at
-        # the end of each time step, it also logs a summary of what happened in
-        # that time step, including the number of people infected, the number
-        # of people dead, etc.  You may want to create a helper class to
-        # compute these statistics for you, as a Logger's job is just to write
-        # logs!
-        # NOTE: Make sure to end every line with a '/n' character to ensure
-        # that each event logged ends up on a separate line!
-        pass
+        with self.open_file('a') as log:
+            log.write(f'Time step {time_step_number} ended, '
+                      f'beginning {time_step_number + 1}...\n')
 
     def open_file(self, mode='r', buffering=-1, encoding=None, errors=None,
                   newline=None, closefd=True, opener=None):
