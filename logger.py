@@ -104,6 +104,5 @@ class Logger(object):
 
     def open_file(self, mode='r', buffering=-1, encoding=None, errors=None,
                   newline=None, closefd=True, opener=None):
-        return open(f'{self.file_name}', mode=mode, buffering=buffering,
-                    encoding=encoding, errors=errors, newline=newline,
-                    closefd=closefd, opener=opener)
+        return open(f'{self.file_name}', mode, buffering, encoding, errors,
+                    newline, closefd, opener)

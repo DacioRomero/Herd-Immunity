@@ -101,7 +101,6 @@ class Simulation():
     def _create_population(self, initial_infected):
         population = []
         infected_count = 0
-        vacc_count = 0
 
         while len(population) != self.population_size:
             if infected_count != initial_infected:
@@ -135,7 +134,7 @@ class Simulation():
 
     def time_step(self):
         alive = list(filter(lambda p: p.is_alive, self.population))
-        infected = list(filter(lambda p: p.infection is not None, alive))
+        infected = list(filter(lambda p: p.infection, alive))
 
         for person in infected:
             for _ in range(100):
